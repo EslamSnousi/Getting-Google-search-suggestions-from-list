@@ -23,22 +23,26 @@ public class Main {
 
         driver.get("https://www.google.com/");
 
-        WebElement searchBar = driver.findElement(By.id("APjFqb"));
+        WebElement searchBar = driver.findElement(By.name("q"));
         searchBar.sendKeys("hello");
+        // use list suggestions if you want to automate it for "hello"
+        //  List<WebElement> suggestions = driver.findElements(By.xpath("//span[contains(.,'ello')]"));
 
-        // Wait for the suggestions to load
-        try {
-            Thread.sleep(2000); // You can replace this with explicit wait
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        //or Use this to make it general automation
+        // Wait for the suggestions list to be visible
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement suggList = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@role='listbox']")));
 
-        List<WebElement> suggestions = driver.findElements(By.xpath("//span[contains(.,'ello')]"));
+//        WebElement suggList = driver.findElement(By.xpath("//ul[@role='listbox']"));
+        List <WebElement> suggestions = suggList.findElements(By.tagName("li"));
 
         // Print each suggestion
-        System.out.println(suggestions.size());
-        for (WebElement suggestion : suggestions) {
-            System.out.println(suggestion.getText());
+//        System.out.println(suggestions.get(1).getText());
+//
+//        System.out.println(suggestions.size());
+        for (int i=0;i< suggestions.size();i++) {
+            System.out.println(i+suggestions.get(i).getText());
         }
+        System.out.println(suggestions.size());
     }
 }
